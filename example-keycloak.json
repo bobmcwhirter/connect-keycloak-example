@@ -1,0 +1,10 @@
+{
+  "realm": "atty",
+  "realm-public-key": "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCTwu+S0KqtQUF/a0bhlMrSqQPduyjZ/ZecXA4E5bw1qstRVKnMI/PqC1ryz9xzZcNZKfC4j/mnl1no3IwmIqNVnwnIGkjEY34cgoNLUqvqY/xUD6kmSuVrLRo8twfHsyHWLHj6Gx+ACf6xyhg92eRKv1Vtzqt6EbOgSZV1jnMQ+wIDAQAB",
+  "auth-server-url": "http://localhost:8080/auth",
+  "ssl-required": "none",
+  "resource": "atty",
+  "credentials": {
+    "secret": "89efcbdf-ee95-4292-bbd9-29304e6744c7"
+  }
+}

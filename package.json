@@ -1,0 +1,17 @@
+{
+  "name": "atty",
+  "version": "0.0.0",
+  "description": "sample app",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express-session": "^1.9.3"
+  },
+  "devDependencies": {
+    "jasmine": "^2.0.1"
+  }
+}

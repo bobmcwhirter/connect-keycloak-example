@@ -3,9 +3,9 @@
 * Redirect URL to `http://localhost:3000/*`
 * Admin URL to `http://localhost:3000/`
 
-# Add `keycloak.json`
+# Import
 
-Copy a keycloak.json file from your admin console
+`example-realm.json` file on Keycloak
 
 # Run
 

@@ -1,5 +1,5 @@
 
-var Keycloak = require('connect-keycloak');
+var Keycloak = require('../connect-keycloak');
 
 var express = require('express');
 var session = require('express-session')

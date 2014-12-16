@@ -5,7 +5,12 @@ var express = require('express');
 var session = require('express-session')
 
 var app = express();
-app.set('port', Number(process.argv[2]) );
+
+var p = 3000;
+if ( process.argv.length >= 3 ) {
+  p = Number( process.argv[2] );
+}
+app.set('port', p );
 
 app.use( session({
   secret: 'aaslkdhlkhsd',

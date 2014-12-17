@@ -21,6 +21,8 @@ app.use( session({
 var keycloak = new Keycloak();
 keycloak.loadConfig();
 
+console.log( "KC", keycloak );
+
 app.use( keycloak.middleware( {
   type: 'session',
   logout: '/logout',
@@ -31,6 +33,12 @@ app.use( keycloak.middleware( {
 app.get( '/', function(req,resp) {
   resp.send( "Howdy!" );
 } )
+
+app.get( '/roles', keycloak.protect(), function(req,resp) {
+  keycloak.admin(resp.locals.token).getApplicationRoles(function(data) {
+    resp.send( JSON.stringify( data ) );
+  })
+})
 
 
 var groupGuard = function(token, req, resp) {

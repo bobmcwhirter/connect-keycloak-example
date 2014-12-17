@@ -32,6 +32,15 @@ app.get( '/', function(req,resp) {
   resp.send( "Howdy!" );
 } )
 
+
+var groupGuard = function(token, req, resp) {
+  return token.hasApplicationRole( req.params.group );
+}
+
+app.get( '/:group/:page', keycloak.protect( groupGuard ), function(req,resp) {
+  resp.send( 'Page: ' + req.params.page + ' for Group: ' + req.params.group + '<br><a href="/logout">logout</a>');
+})
+
 app.get( '/:page', keycloak.protect(), function(req,resp) {
   resp.send( 'Page: ' + req.params.page + '<br><a href="/logout">logout</a>');
 } );

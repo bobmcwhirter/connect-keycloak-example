@@ -29,7 +29,8 @@
             "realmRoles": ["admin"],
             "applicationRoles": {
                 "realm-management": ["realm-admin"],
-                "account": ["manage-account"]
+                "account": ["manage-account"],
+                "example-app": ["people", "dogs"]
             }
         }
     ],
@@ -39,7 +40,15 @@
                 "name": "admin",
                 "description": "Administrator privileges"
             }
-        ]
+        ],
+        "application": {
+          "example-app": [
+            { "name": "people" },
+            { "name": "dogs" },
+            { "name": "cats" },
+            { "name": "fish" }
+          ]
+        } 
     },
     "applications": [
         {

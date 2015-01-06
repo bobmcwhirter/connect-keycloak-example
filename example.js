@@ -10,21 +10,28 @@ var p = 3000;
 if ( process.argv.length >= 3 ) {
   p = Number( process.argv[2] );
 }
+
 app.set('port', p );
+
+var memoryStore = new session.MemoryStore();
 
 app.use( session({
   secret: 'aaslkdhlkhsd',
   resave: false,
   saveUninitialized: true,
+  store: memoryStore,
 } ))
 
-var keycloak = new Keycloak();
-keycloak.loadConfig();
+var keycloak = new Keycloak({
+  store: memoryStore
+});
 
-console.log( "KC", keycloak );
+app.use( function(req,resp,next) {
+  console.log( req.url );
+  next();
+})
 
 app.use( keycloak.middleware( {
-  type: 'session',
   logout: '/logout',
   admin: '/',
 } ));
@@ -42,7 +49,7 @@ app.get( '/roles', keycloak.protect(), function(req,resp) {
 
 
 var groupGuard = function(token, req, resp) {
-  return token.hasApplicationRole( req.params.group );
+  return token.hasRole( req.params.group );
 }
 
 app.get( '/:group/:page', keycloak.protect( groupGuard ), function(req,resp) {
@@ -54,7 +61,7 @@ app.get( '/:page', keycloak.protect(), function(req,resp) {
 } );
 
 var server = app.listen(app.settings.port, function () {
-  keycloak.register();
+  //keycloak.register();
   var host = server.address().address
   var port = server.address().port
   console.log('Example app listening at http://%s:%s', host, port)

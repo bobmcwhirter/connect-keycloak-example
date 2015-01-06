@@ -48,21 +48,14 @@ app.use( keycloak.middleware( {
 } ));
 
 
+// A normal un-protected public URL.
+
 app.get( '/', function(req,resp) {
   resp.send( "Howdy!" );
 } )
 
 
-/*
-app.get( '/roles', keycloak.protect(), function(req,resp) {
-  keycloak.admin(resp.locals.token).getApplicationRoles(function(data) {
-    resp.send( JSON.stringify( data ) );
-  })
-})
-*/
-
-
-// A guard can take up to 3 arguments, and is passed
+// A protection guard can take up to 3 arguments, and is passed
 // the access_token, the HTTP request and the HTTP response.
 //
 // The token can be tested for roles:
@@ -70,6 +63,10 @@ app.get( '/roles', keycloak.protect(), function(req,resp) {
 // * 'foo' is a simple application role 'foo' for the current application
 // * 'bar:foo' is an application role 'foo' for the application 'bar'
 // * 'realm:foo' is a realm role 'foo' for the application's realm
+//
+// A protection guard can be passed to keycloak.protect(...) for any
+// URL.  If it returns true, then the request is allowed.  If false,
+// access will be denied.
 
 var groupGuard = function(token, req, resp) {
   return token.hasRole( req.params.group );
@@ -80,6 +77,21 @@ var groupGuard = function(token, req, resp) {
 //
 // Additionally (not shown) it can take simple string role specifier identical
 // to those used above by token.hasRole(...).
+//
+// In all cases, if a user is not-yet-authenticated, the Keycloak token authentication
+// dance will begin by redirecting the user to the Keycloak login screen.  If
+// authenticated correctly with Keycloak itself, the workflow continues to exchange
+// the Keycloak-provided for a signed Keycloak access_token.
+//
+// A user's authentication may be provided through the HTTP session (via cookies)
+// or through Bearer authentication header.
+//
+// In the event a user is authenticated, but his access-token has expired, if a
+// refresh-token is available, the middleware will attempt to perform a refresh.
+//
+// All of the above workflow is transparent to the user, who ultimately will
+// access the requested resource or be denied, modulo an initial login through
+// Keycloak itself.
 
 app.get( '/:group/:page', keycloak.protect( groupGuard ), function(req,resp) {
   resp.send( 'Page: ' + req.params.page + ' for Group: ' + req.params.group + '<br><a href="/logout">logout</a>');

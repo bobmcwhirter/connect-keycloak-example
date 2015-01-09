@@ -1,5 +1,5 @@
 
-var Keycloak = require('../connect-keycloak');
+var Keycloak = require('connect-keycloak');
 
 var express = require('express');
 var session = require('express-session')
@@ -32,6 +32,10 @@ app.use( session({
 var keycloak = new Keycloak({
   store: memoryStore
 });
+
+keycloak.authenticated = function(request) {
+  request.session.name = request.auth.grant.id_token.content.name;
+}
 
 // Install the Keycloak middleware.
 //
@@ -94,14 +98,14 @@ var groupGuard = function(token, req, resp) {
 // Keycloak itself.
 
 app.get( '/:group/:page', keycloak.protect( groupGuard ), function(req,resp) {
-  resp.send( 'Page: ' + req.params.page + ' for Group: ' + req.params.group + '<br><a href="/logout">logout</a>');
+  resp.send( 'Page: ' + req.params.page + ' for Group: ' + req.params.group + '<br><a href="/logout">logout</a> ' + req.session.name );
 })
 
 // A simple keycloak.protect() ensures that a user is authenticated
 // but provides no additional RBAC protection.
 
 app.get( '/:page', keycloak.protect(), function(req,resp) {
-  resp.send( 'Page: ' + req.params.page + '<br><a href="/logout">logout</a>');
+  resp.send( 'Page: ' + req.params.page + '<br><a href="/logout">logout</a> ' + req.session.name );
 } );
 
 var server = app.listen(app.settings.port, function () {
